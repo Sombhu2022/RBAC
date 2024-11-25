@@ -1,7 +1,7 @@
-import  { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 import bcrypt from 'bcrypt'
 
-// create user schema 
+// table stracture 
 const userSchema = new Schema({
 
     name: {
@@ -26,10 +26,21 @@ const userSchema = new Schema({
         required: [true, 'password is reqired!'],
         select: false
     },
+    profile_pic: {
+        url: {
+            type: String,
+            default: 'https://res.cloudinary.com/dab0ekhmy/image/upload/v1728130610/thik-ai/gvjpvq3xljmnw2vwdkag.avif'
+        },
+        public_id: {
+            type: String,
+            default: null
+        }
+    }
+    ,
     role: {
         type: String,
-        enum: ['customer', 'admin', 'driver', 'owner'],
-        default: 'customer'
+        enum: ['user' , 'admin', 'controller'],
+        default: 'user'
     },
     otp: {
         type: Number
@@ -40,6 +51,10 @@ const userSchema = new Schema({
     isVerify: {
         type: Boolean,
         default: false
+    },
+    isProfileComplete : {
+        type:Boolean,
+        default:false
     }
 
 }, { timestamps: true })
@@ -64,5 +79,4 @@ userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password , this.password)
 }
 
-// create model 
 export const Users = model('user', userSchema)
