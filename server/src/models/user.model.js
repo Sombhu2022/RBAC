@@ -55,6 +55,10 @@ const userSchema = new Schema({
     isProfileComplete : {
         type:Boolean,
         default:false
+    },
+    isTwoStepAuth:{
+        type:Boolean ,
+        default:false
     }
 
 }, { timestamps: true })
