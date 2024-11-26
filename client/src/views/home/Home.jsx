@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaUserCircle, FaCogs, FaLifeRing } from "react-icons/fa";
-import Blog from "../blog/Blog";
+import Blog from "../blog/BlogPage";
 
 function Home() {
   const { user, isAuthenticate } = useSelector((state) => state.user);

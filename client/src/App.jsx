@@ -14,7 +14,9 @@ import { authenticateUser } from './store/user/userController';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import BlogDetails from './views/blog/Components/BlogDetails';
-import Blog from './views/blog/Blog';
+
+import { fetchAllBlogs } from './store/blog/blogController';
+import BlogPage from './views/blog/BlogPage';
 
 function App() {
  
@@ -22,9 +24,10 @@ function App() {
   const user =  useSelector((state)=> state.user)
   useEffect(()=>{
        dispatch(authenticateUser())
+       dispatch(fetchAllBlogs())
   },[])
 
-  console.log('user data' , user);
+ 
 
   const demoBlogs = [
     {
@@ -70,7 +73,7 @@ function App() {
         <Route path='/' element={<Layout/>}>
         <Route index element={<Home/>}/>
         <Route path='/profile' element={<Profile/>}/>
-        <Route path='/blogs' element={<Blog/>}/>
+        <Route path='/blogs' element={<BlogPage/>}/>
         <Route path='/blog/:blogId' element={<BlogDetails blogs={demoBlogs}/>}/>
 
         {/* <Route path='/dashboard' element={<Dashboard/>}/>

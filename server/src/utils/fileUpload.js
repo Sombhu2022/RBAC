@@ -6,11 +6,13 @@ export const fileUploader = async (file)=>{
 
     try {
         const data =await cloudinary.uploader.upload(file ,{
-            folder:"ctmp"
+            folder:"rbac"
         })
 
       return { url:data.secure_url , public_id: data.public_id , error:null}  
     } catch (error) {
+      console.error(error);
+      
         return { url:null , public_id:null , error}
     }
 

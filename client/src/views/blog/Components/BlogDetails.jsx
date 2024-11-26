@@ -60,7 +60,7 @@ const BlogDetails = ({ blogs }) => {
           </div>
         </div>
       </div>
-      <AddBlog/>
+      
     </div>
   );
 };

@@ -1,11 +1,11 @@
+// Comment.js
 import mongoose, { model, Schema } from "mongoose";
 
-// Comment Schema
 const commentSchema = new Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user", // Reference to the User model
+      ref: "user",
       required: true,
     },
     message: {
@@ -15,13 +15,11 @@ const commentSchema = new Schema(
     replies: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "comment", // Reference to the same schema for nested comments
+        ref: "comment",
       },
     ],
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
-
-export const Comment = model("comment", commentSchema);
-
+export const Comment = mongoose.model("comment", commentSchema); // Correctly register the model
