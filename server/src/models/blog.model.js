@@ -22,6 +22,10 @@ const blogSchema = new Schema(
         type: String,
         required: true,
       },
+      title:{
+        type:String ,
+        required : true
+      },
 
       comments: [
         {
@@ -43,4 +47,4 @@ const blogSchema = new Schema(
     { timestamps: true } // Adds createdAt and updatedAt fields
   );
   
-export const Blog = model("blog", blogSchema);
+export const Blogs = model("blog", blogSchema);

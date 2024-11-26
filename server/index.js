@@ -8,7 +8,9 @@ import { userRouter } from "./src/routes/user.router.js";
 import bodyParser from "body-parser";
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
-
+import { blogRouter } from "./src/routes/blog.router.js";
+import { cloudinaryConfig } from "./src/config/cloudinar.config.js";
+import { v2 as cloudinary } from "cloudinary";
 
 
 const startServer = async () => {
@@ -18,7 +20,9 @@ const startServer = async () => {
     // Middleware for CORS
     app.use( corsConfig );
 
-
+    // setup cloudinary
+    cloudinaryConfig()
+  
     app.use(bodyParser.json({limit:"50mb"}))
     app.use(express.json({ limit: '50mb' }))
     
@@ -44,6 +48,7 @@ const startServer = async () => {
     // Define routes
     app.use('/api/v1/data' , basicRouter )
     app.use('/api/v1/user' , userRouter)
+    app.use('/api/v1/blog' , blogRouter)
   
 
     // Start the server

@@ -4,40 +4,46 @@ import { fileDestroy, fileUploader } from '../utils/fileUpload.js';
 // Add a new blog with or without an image
 export const addBlog = async (req, res) => {
     try {
-        const { content } = req.body;
-        const { file } = req.body; // Image file if provided
-        const { id } = req.user
-
-        if (!content ) {
+        const { image , content , title} = req.body;
+       console.log(req.body);
+       
+        const { id } = req.user;
+   
+        if (!content || !title) {
             return res.status(400).json({
-                message: "Title, content, and author are required!",
+                message: "Title, content are required!",
                 success: false,
             });
         }
 
         // Handle optional image upload
-        let image = null;
-        if (file) {
-            const { url, public_id, error } = await fileUploader(file);
+        let tempImage ={
+            url : '',
+            public_id:''
+        };
+
+        if (image) {
+            const { url, public_id, error } = await fileUploader(image);
             if (error) {
                 return res.status(400).json({
                     message: "Image upload failed!",
                     success: false,
                 });
             }
-            image = { url, public_id };
+            tempImage = { url, public_id };
         }
 
         const blog = await Blogs.create({
             content,
             user:id ,
-            image,
+            title,
+            image:tempImage,
         });
 
         res.status(201).json({
             message: "Blog created successfully!",
             success: true,
-            blog,
+            data:blog,
         });
     } catch (error) {
         console.error(error);
@@ -47,6 +53,45 @@ export const addBlog = async (req, res) => {
         });
     }
 };
+
+
+// find all blogs 
+export const fetchAllBlogs = async (req, res) => {
+    try {
+        // Fetch blogs and populate the fields
+        const blogs = await Blogs.find({})
+            .populate({
+                path: 'user',
+                select: 'name email profile_pic', // Populate only specific fields from User
+            })
+            .populate({
+                path: 'reaction',
+                select: 'name email profile_pic', // Populate only specific fields from User for reactions
+            })
+            .sort({ createdAt: -1 }); // Sort by creation date (latest first)
+
+        if (!blogs.length) {
+            return res.status(404).json({
+                success: false,
+                message: "No blogs found",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Blogs retrieved successfully",
+            data: blogs,
+        });
+    } catch (error) {
+        console.error("Error fetching blogs:", error);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching blogs",
+            error: error.message,
+        });
+    }
+};
+
 
 // Delete a blog
 export const deleteBlog = async (req, res) => {
