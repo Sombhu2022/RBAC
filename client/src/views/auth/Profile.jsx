@@ -42,7 +42,7 @@ function Profile() {
   },[isAuthenticate])
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg min-h-screen">
       <h1 className="text-3xl font-semibold text-center mb-6">Profile</h1>
 
       <div className="flex flex-col md:flex-row items-center md:space-x-8">

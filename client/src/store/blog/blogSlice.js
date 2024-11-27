@@ -1,20 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createBlog, fetchAllBlogs, fetchBlogByBlogId } from "./blogController";
+import { createBlog, deleteBlog, fetchAllBlogs, fetchAllBlogsOfEachUser, fetchBlogByBlogId, updateBlog } from "./blogController";
 
 const initialState = {
     blogs: [],
     blog: {},
+    myBlogs: [],
     message: "",
     error: "",
     status: {
         createBlog: "",
-        fetchAllBlog: "" ,
-        fetchBlogByBlogId: ''
+        fetchAllBlog: "",
+        fetchBlogByBlogId: '',
+        fetchAllBlogsOfEachUser: '',
+        deleteBlog: '',
+        updateBlog: ''
     },
     loading: {
         createBlogLoading: false,
         fetchAllBlogLoading: false,
-        fetchBlogByBlogIdLoading : false
+        fetchBlogByBlogIdLoading: false,
+        fetchAllBlogsOfEachUserLoading: false,
+        deleteBlogLoading: false,
+        updateBlogLoading: false
     }
 };
 
@@ -89,6 +96,91 @@ export const blogSlice = createSlice({
                 state.message = message || "Blog fetching failed!";
                 state.error = error || "Unknown error occurred.";
             })
+
+            // fetch  all Blogs of each user 
+            .addCase(fetchAllBlogsOfEachUser.pending, (state) => {
+                state.loading.fetchAllBlogsOfEachUserLoading = true;
+                state.status.fetchAllBlogsOfEachUser = "pending";
+            })
+            .addCase(fetchAllBlogsOfEachUser.fulfilled, (state, action) => {
+                const { data, message } = action.payload;
+                state.loading.fetchAllBlogsOfEachUserLoading = false;
+                state.status.fetchAllBlogsOfEachUser = "success";
+                state.myBlogs = data
+                state.message = message || "Blog fetched successfully!";
+            })
+            .addCase(fetchAllBlogsOfEachUser.rejected, (state, action) => {
+                const { error, message } = action.payload || {};
+                state.loading.fetchAllBlogsOfEachUserLoading = false;
+                state.status.fetchAllBlogsOfEachUser = "rejected";
+                state.message = message || "Blog fetching failed!";
+                state.error = error || "Unknown error occurred.";
+            })
+
+
+            // delete post  
+            .addCase(deleteBlog.pending, (state) => {
+                state.loading.deleteBlogLoading = true;
+                state.status.deleteBlog = "pending";
+            })
+            .addCase(deleteBlog.fulfilled, (state, action) => {
+                const { data, message } = action.payload;
+                state.loading.deleteBlogLoading = false;
+                state.status.deleteBlog = "success";
+                // Remove the blog from `myBlogs` and `blogs` arrays if it exists
+                state.myBlogs = state.myBlogs.filter((blog) => blog._id !== data._id);
+                state.blogs = state.blogs.filter((blog) => blog._id !== data._id);
+
+                // If the deleted blog is currently viewed, clear the `blog` object
+                if (state.blog._id === data._id) {
+                    state.blog = {};
+                }
+
+                state.message = message || "Blog fetched successfully!";
+            })
+            .addCase(deleteBlog.rejected, (state, action) => {
+                const { error, message } = action.payload || {};
+                state.loading.deleteBlogLoading = false;
+                state.status.deleteBlog = "rejected";
+                state.message = message || "Blog fetching failed!";
+                state.error = error || "Unknown error occurred.";
+            })
+
+         // update blog 
+            .addCase(updateBlog.pending, (state) => {
+                state.loading.updateBlogLoading = true;
+                state.status.updateBlog = "pending";
+            })
+            .addCase(updateBlog.fulfilled, (state, action) => {
+                const { data, message } = action.payload;
+                state.loading.updateBlogLoading = false;
+                state.status.updateBlog = "success";
+            
+                // Update the blog in `myBlogs` if it exists
+                state.myBlogs = state.myBlogs.map((blog) => 
+                    blog._id === data._id ? data: blog
+                );
+            
+                // Update the blog in `blogs` if it exists
+                state.blogs = state.blogs.map((blog) => 
+                    blog._id === data._id ? data : blog
+                );
+            
+                // Update the currently viewed blog if it matches the updated blog
+                if (state.blog._id === data._id) {
+                    state.blog = data
+                }
+            
+                state.message = message || "Blog updated successfully!";
+            })
+            .addCase(updateBlog.rejected, (state, action) => {
+                const { error, message } = action.payload || {};
+                state.loading.updateBlogLoading = false;
+                state.status.updateBlog = "rejected";
+                state.message = message || "Blog update failed!";
+                state.error = error || "Unknown error occurred.";
+            });
+            
     }
 });
 

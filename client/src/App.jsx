@@ -18,39 +18,16 @@ import BlogDetails from './views/blog/Components/BlogDetails';
 import { fetchAllBlogs } from './store/blog/blogController';
 import BlogPage from './views/blog/BlogPage';
 import DashBoard from './views/dashboard/DashBoard';
+import EditBlog from './views/blog/Components/EditBlog';
 
 function App() {
  
   const dispatch = useDispatch()
-  const user =  useSelector((state)=> state.user)
+  const {user , isAuthenticate} =  useSelector((state)=> state.user)
   useEffect(()=>{
        dispatch(authenticateUser())
        dispatch(fetchAllBlogs())
   },[])
-
- 
-
-  const demoBlogs = [
-    {
-      _id: "1",
-      user: { _id: "101", name: "John Doe" },
-      image: { url: "https://via.placeholder.com/150" },
-      content: "This is a sample blog post about coding best practices.",
-      comments: ["Great post!", "Very informative.", "Loved it!"],
-      reaction: ["User1", "User2", "User3"],
-      createdAt: "2024-11-20T12:34:56",
-    },
-    {
-      _id: "2",
-      user: { _id: "102", name: "Jane Smith" },
-      image: { url: "https://via.placeholder.com/150" },
-      content: "An introduction to MongoDB and Mongoose.",
-      comments: ["Nice article!", "Thanks for sharing."],
-      reaction: ["User1", "User3"],
-      createdAt: "2024-11-22T08:15:30",
-    },
-  ];
-
 
   return (
     <>
@@ -75,8 +52,10 @@ function App() {
         <Route index element={<Home/>}/>
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/blogs' element={<BlogPage/>}/>
-        <Route path='/blog/:blogId' element={<BlogDetails blogs={demoBlogs}/>}/>
-         <Route path='/dashboard' element={<DashBoard/>}/>
+        <Route path='/blog/:blogId' element={<BlogDetails/>}/>
+        <Route path='/blog/edit/:blogId' element={<EditBlog/>}/>
+        
+         {isAuthenticate && <Route path='/dashboard' element={<DashBoard/>}/>}
     
         </Route>
       <Route path='/register' element={<Register/>}/>

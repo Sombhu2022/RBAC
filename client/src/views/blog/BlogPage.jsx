@@ -7,14 +7,14 @@ import Blog from "./Components/Blog";
 const BlogPage = () => {
   const [isAddBlogOpen, setIsAddBlogOpen] = useState(false);
   const { isAuthenticate } = useSelector((state) => state.user);
-  const [ blogs , setBlogs ] = useState([])
-  const blogState = useSelector((state)=> state.blog)
+  const [blogs, setBlogs] = useState([]);
+  const blogState = useSelector((state) => state.blog);
 
-  useEffect(()=>{
-    if(blogState.blogs.length > 0){
-      setBlogs(blogState.blogs)
+  useEffect(() => {
+    if (blogState.blogs.length > 0) {
+      setBlogs(blogState.blogs);
     }
-  },[blogState])
+  }, [blogState]);
 
   const handleAddBlog = () => {
     setIsAddBlogOpen(!isAddBlogOpen);
@@ -37,24 +37,25 @@ const BlogPage = () => {
 
         {/* Blog List */}
         <h1 className="text-3xl font-bold text-center mb-8">Blog Posts</h1>
-        <div className="flex flex-col justify-center items-center gap-6">
+        <div className="flex justify-center items-center">
+        <div className="grid grid-cols-1 gap-6 justify-items-center w-full sm:max-w-[500px] md:max-w-[700px] ">
           {blogs.map((blog) => (
             <div
               key={blog._id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden max-w-xl"
+              className="bg-white border shadow-lg rounded-lg overflow-hidden w-full "
             >
-             <Blog blog={blog}/>
+              <Blog blog={blog} />
             </div>
           ))}
+        </div>
+
         </div>
       </div>
 
       {/* Add Blog Modal */}
       {isAddBlogOpen && (
         <div className="popup_container">
-          
-            <AddBlog onClose={()=>setIsAddBlogOpen(false)}/>
-         
+          <AddBlog onClose={() => setIsAddBlogOpen(false)} />
         </div>
       )}
     </div>
