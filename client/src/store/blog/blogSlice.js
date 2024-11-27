@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createBlog, fetchAllBlogs } from "./blogController";
+import { createBlog, fetchAllBlogs, fetchBlogByBlogId } from "./blogController";
 
 const initialState = {
     blogs: [],
@@ -8,11 +8,13 @@ const initialState = {
     error: "",
     status: {
         createBlog: "",
-        fetchAllBlog: ""
+        fetchAllBlog: "" ,
+        fetchBlogByBlogId: ''
     },
     loading: {
         createBlogLoading: false,
-        fetchAllBlogLoading: false
+        fetchAllBlogLoading: false,
+        fetchBlogByBlogIdLoading : false
     }
 };
 
@@ -64,6 +66,26 @@ export const blogSlice = createSlice({
                 const { error, message } = action.payload || {};
                 state.loading.fetchAllBlogLoading = false;
                 state.status.fetchAllBlog = "rejected";
+                state.message = message || "Blog fetching failed!";
+                state.error = error || "Unknown error occurred.";
+            })
+
+            // fetch  Blog by blogId 
+            .addCase(fetchBlogByBlogId.pending, (state) => {
+                state.loading.fetchBlogByBlogIdLoading = true;
+                state.status.fetchBlogByBlogId = "pending";
+            })
+            .addCase(fetchBlogByBlogId.fulfilled, (state, action) => {
+                const { data, message } = action.payload;
+                state.loading.fetchBlogByBlogIdLoading = false;
+                state.status.fetchBlogByBlogId = "success";
+                state.blog = data
+                state.message = message || "Blog fetched successfully!";
+            })
+            .addCase(fetchBlogByBlogId.rejected, (state, action) => {
+                const { error, message } = action.payload || {};
+                state.loading.fetchBlogByBlogIdLoading = false;
+                state.status.fetchBlogByBlogId = "rejected";
                 state.message = message || "Blog fetching failed!";
                 state.error = error || "Unknown error occurred.";
             })

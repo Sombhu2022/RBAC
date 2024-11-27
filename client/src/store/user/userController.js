@@ -61,6 +61,32 @@ export const authenticateUser = createAsyncThunk(
     }
 );
 
+export const fetchAllUserWithPost = createAsyncThunk(
+    'user/fetchAllUserWithPost',
+    async (_ , { rejectWithValue }) => {
+        try {
+            const { data } = await axios.get(
+                `${baseUrl}/user/all`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials:true
+                }
+            );
+            console.log(data);
+
+            return data;
+        } catch (error) {
+            console.error('error', error)
+            if (axios.isAxiosError(error) && error.response) {
+                return rejectWithValue(error.response.data);
+            }
+            return rejectWithValue('An unexpected error occurred');
+        }
+    }
+);
+
 
 export const loginUser  = createAsyncThunk(
     'user/loginUser',
@@ -177,6 +203,34 @@ export const addTwoStepVerification  = createAsyncThunk(
         try {
             const { data } = await axios.post(
                 `${baseUrl}/user/twostep-verify`, {isTwoStepAuth},
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials:true
+                }
+            );
+            console.log(data);
+
+            return data;
+        } catch (error) {
+            console.error('error', error)
+            if (axios.isAxiosError(error) && error.response) {
+                return rejectWithValue(error.response.data);
+            }
+            return rejectWithValue('An unexpected error occurred');
+        }
+    }
+);
+
+
+// update user role , only admin can controll 
+export const updateUserRole  = createAsyncThunk(
+    'user/updateUserRole',
+    async ( {userId , newRole} , { rejectWithValue }) => {
+        try {
+            const { data } = await axios.post(
+                `${baseUrl}/user/update-role/${userId}`, {newRole},
                 {
                     headers: {
                         'Content-Type': 'application/json'
