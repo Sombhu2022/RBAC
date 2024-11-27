@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { addTwoStepVerification, authenticateUser, loginUser, logoutUser, regUser, sendOtpForProfileValidation, verifyOtpForProfileValidation } from "./userController"
+import { addTwoStepVerification, authenticateUser, fetchAllUserWithPost, loginUser, logoutUser, regUser, sendOtpForProfileValidation, updateUserRole, verifyOtpForProfileValidation } from "./userController"
 
 
 const initialState = {
+    users:[],
     user:{},
     isAuthenticate:false,
     status:{
@@ -14,7 +15,9 @@ const initialState = {
         sendOtp:'',
         verifyOtp:"",
         forgetPassword:'',
-        twoStepAuth:''
+        twoStepAuth:'',
+        fetchAllUser:'',
+        updateUserRole: ''
 
     },
     loading :{
@@ -26,7 +29,9 @@ const initialState = {
         sendOtpLoading:false,
         forgetPasswordLoading:false,
         verifyOtpLoading:false,
-        twoStepAuthLoading:false
+        twoStepAuthLoading:false,
+        fetchAllUserLoading : false,
+        updateUserRoleLoading:false
     },
     error:null,
     message:null,
@@ -48,7 +53,9 @@ export const userSlice = createSlice({
             state.status.sendOtp = ''
             state.status.verifyOtp = ""
             state.status.forgetPassword = ''
-            state.status.twoStepAuth = ''
+            state.status.twoStepAuth = '',
+            state.status.updateUserRole = '',
+            state.status.fetchAllUser = ''
 
         }
 
@@ -116,6 +123,8 @@ export const userSlice = createSlice({
             state.status.authenticateUser = 'rejected'
             state.loading.authenticateUserLoading = false
         })
+     
+        
 
      // login  user    
         // pending 
@@ -266,6 +275,63 @@ export const userSlice = createSlice({
             state.loading.twoStepAuthLoading = false
         })
 
+   
+   // admin can access this fetures 
+        
+        // fetch all user details if you are admin...    
+        // pending 
+        builder.addCase(fetchAllUserWithPost.pending , (state , action)=>{
+
+            state.error = null
+            state.message = ''
+            state.status.fetchAllUser = 'pending'
+            state.loading.fetchAllUserLoading = true
+
+        })
+        // fulfilled or success
+        builder.addCase(fetchAllUserWithPost.fulfilled , (state , action)=>{
+            const { data , message} = action.payload
+            state.users = data
+            state.message = message || 'user register success'
+            state.status.fetchAllUser = 'sucess'
+            state.loading.fetchAllUserLoading = false
+            state.error = null
+            
+        })
+        // rejected 
+        builder.addCase(fetchAllUserWithPost.rejected , (state , action)=>{ 
+            state.error = action.payload?.message || {}
+            state.message = action.payload?.message  || ' something error , please try aggain '
+            state.status.fetchAllUser = 'rejected'
+            state.loading.fetchAllUserLoading = false
+        })
+
+     // update user role  user details if you are admin...    
+        // pending 
+        builder.addCase(updateUserRole.pending , (state , action)=>{
+
+            state.error = null
+            state.message = ''
+            state.status.updateUserRole = 'pending'
+            state.loading.updateUserRoleLoading = true
+
+        })
+        // fulfilled or success
+        builder.addCase(updateUserRole.fulfilled , (state , action)=>{
+            const {  message} = action.payload
+            state.message = message || 'user register success'
+            state.status.updateUserRole = 'sucess'
+            state.loading.updateUserRoleLoading = false
+            state.error = null
+            
+        })
+        // rejected 
+        builder.addCase(updateUserRole.rejected , (state , action)=>{ 
+            state.error = action.payload?.message || {}
+            state.message = action.payload?.message  || ' something error , please try aggain '
+            state.status.updateUserRole = 'rejected'
+            state.loading.updateUserRoleLoading = false
+        })
 
     }
 })

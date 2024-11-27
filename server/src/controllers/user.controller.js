@@ -108,6 +108,41 @@ export const getUser = async (req, res) => {
     }
 };
 
+
+export const getAllUsersWithPost = async(req , res)=>{
+    try {
+        // Fetch users along with their posts
+        const usersWithPosts = await Users.aggregate([
+          {
+            $lookup: {
+              from: "blogs", // Collection name for posts
+              localField: "_id",
+              foreignField: "user",
+              as: "posts",
+            },
+          },
+          {
+            $project: {
+              name: 1,
+              email: 1,
+              role: 1,
+              posts: 1,
+              createdAt: 1 ,
+              updatedAt:1,
+              isVerify:1,
+              totalPosts: { $size: "$posts" }, // Calculate total number of posts
+            },
+          },
+        ]);
+    
+       return  res.status(200).json({ message:'all user fetched' , data:usersWithPosts});
+
+      } catch (error) {
+        console.error("Error fetching users and posts:", error);
+        res.status(500).json({ message: "Server error." });
+      }
+}
+
 // Update profile picture
 export const changeProfilePic = async (req, res) => {
     try {
@@ -175,6 +210,44 @@ export const logInUser = async (req, res) => {
         res.status(500).json({ message: "Server error.", error });
     }
 };
+
+
+// Update User Role by Admin
+export const updateUserRoleByAdmin = async (req, res) => {
+    try {
+      // 2. Get user ID and the new role from request
+      const { newRole } = req.body;
+      const { userId } = req.params;
+  
+      // 3. Validate the new role
+      const validRoles = ['user', 'admin', 'controller'];  // Add any other roles if required
+      if (!validRoles.includes(newRole)) {
+        return res.status(400).json({ message: 'Invalid role.' });
+      }
+  
+      // 4. Find the user by ID
+      const user = await Users.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+  
+      // 5. Check if the user is already an admin (or whatever condition you want)
+      if (user.role === 'admin' && newRole === 'admin') {
+        return res.status(400).json({ message: 'User is already an admin.' });
+      }
+  
+      // 6. Update the user's role
+      user.role = newRole;
+      await user.save();
+  
+      // 7. Send success response
+      return res.status(200).json({ message: `User role updated to ${newRole} successfully.` });
+  
+    } catch (error) {
+      console.error('Error updating user role:', error);
+      return res.status(500).json({ message: 'Server error, try again later.' });
+    }
+  };
 
 // Log out user
 export const logOutUser = (req, res) => {

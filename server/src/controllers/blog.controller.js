@@ -55,6 +55,8 @@ export const addBlog = async (req, res) => {
 };
 
 
+
+
 // find all blogs 
 export const fetchAllBlogs = async (req, res) => {
     try {
@@ -81,6 +83,44 @@ export const fetchAllBlogs = async (req, res) => {
             success: true,
             message: "Blogs retrieved successfully",
             data: blogs,
+        });
+    } catch (error) {
+        console.error("Error fetching blogs:", error);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching blogs",
+            error: error.message,
+        });
+    }
+};
+
+// fetchBlogById 
+export const fetchBlogById = async (req, res) => {
+    try {
+        const { blogId } = req.params
+        // Fetch blogs and populate the fields
+        const blog = await Blogs.findById(blogId)
+            .populate({
+                path: 'user',
+                select: 'name email profile_pic', // Populate only specific fields from User
+            })
+            .populate({
+                path: 'reaction',
+                select: 'name email profile_pic', // Populate only specific fields from User for reactions
+            })
+            
+
+        if (!blog) {
+            return res.status(404).json({
+                success: false,
+                message: "No blogs found",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Blog retrieved successfully",
+            data: blog,
         });
     } catch (error) {
         console.error("Error fetching blogs:", error);

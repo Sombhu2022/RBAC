@@ -27,36 +27,19 @@ export const isAuthenticate = async (req, res , next) => {
     }
 }
 
-export const isAdmin =(req , res , next)=>{
+export const authorizeRoles = (...allowedRoles) => {
+    return (req, res, next) => {
+      const { role } = req.user;
 
-        const {role} = req.user
-        console.log(role);
-        if(role === 'admin'){
-            console.log("admin ok");
-            next();
-        }
-        else{
-            console.log("admin not");
-            res.status(400).json({
-                message:"only admin can be chenge this section",
-            })
-        }
-     
-}
-
-export const isOwnerOrDriver =(req , res , next)=>{
-
-        const {role} = req.user
-        console.log(role);
-        if(role === 'owner'||role === 'driver' ){
-            console.log("owmer or driver");
-            next();
-        }
-        else{
-            console.log("admin not");
-            res.status(400).json({
-                message:"only owner or driver can be chenge this section",
-            })
-        }
-     
-}
+      if (allowedRoles.includes(role)) {
+        console.info("Access granted");
+        next();
+      } else {
+        console.error("Access denied");
+        res.status(403).json({
+          message: "Access denied. You do not have the required permissions.",
+        });
+      }
+    };
+  };
+  

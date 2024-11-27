@@ -17,6 +17,7 @@ import BlogDetails from './views/blog/Components/BlogDetails';
 
 import { fetchAllBlogs } from './store/blog/blogController';
 import BlogPage from './views/blog/BlogPage';
+import DashBoard from './views/dashboard/DashBoard';
 
 function App() {
  
@@ -75,10 +76,8 @@ function App() {
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/blogs' element={<BlogPage/>}/>
         <Route path='/blog/:blogId' element={<BlogDetails blogs={demoBlogs}/>}/>
-
-        {/* <Route path='/dashboard' element={<Dashboard/>}/>
-        <Route path='/products' element={<ProductList/>}/>
-        <Route path='/products/:id' element={<ProductDetails/>}/> */}
+         <Route path='/dashboard' element={<DashBoard/>}/>
+    
         </Route>
       <Route path='/register' element={<Register/>}/>
       <Route path='/login' element={<Login/>}/>
