@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 import { blogRouter } from "./src/routes/blog.router.js";
 import { cloudinaryConfig } from "./src/config/cloudinar.config.js";
 import { v2 as cloudinary } from "cloudinary";
+import { reportRouter } from "./src/routes/report.router.js";
 
 
 const startServer = async () => {
@@ -49,6 +50,7 @@ const startServer = async () => {
     app.use('/api/v1/data' , basicRouter )
     app.use('/api/v1/user' , userRouter)
     app.use('/api/v1/blog' , blogRouter)
+    app.use('/api/v1/report' , reportRouter)
   
 
     // Start the server

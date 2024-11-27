@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { addBlog, fetchAllBlogs, fetchBlogById } from '../controllers/blog.controller.js'
+import { addBlog, deleteBlog, fetchAllBlogs, fetchAllBlogsOfEachUser, fetchBlogById, updateBlog } from '../controllers/blog.controller.js'
 import { isAuthenticate } from '../middlewares/authentication.js'
 
 
@@ -10,6 +10,9 @@ router
    .post('/' , isAuthenticate , addBlog)
    .get('/' , fetchAllBlogs )
    .get('/:blogId' , fetchBlogById)
+   .get('/myblog/all', isAuthenticate , fetchAllBlogsOfEachUser )
+   .delete('/:blogId' , isAuthenticate , deleteBlog)
+   .patch('/:blogId' , isAuthenticate , updateBlog)
 
 
 export const blogRouter = router

@@ -94,6 +94,8 @@ export const fetchAllBlogs = async (req, res) => {
     }
 };
 
+
+
 // fetchBlogById 
 export const fetchBlogById = async (req, res) => {
     try {
@@ -133,18 +135,77 @@ export const fetchBlogById = async (req, res) => {
 };
 
 
+
+
+export const fetchAllBlogsOfEachUser = async (req, res) => {
+    try {
+        const { id } = req.user; // Assumes middleware sets `req.user`
+        console.log("User ID:", id);
+
+        // Fetch blogs for the user and populate fields
+        const blogs = await Blogs.find({ user : id })
+            .populate({
+                path: 'user',
+                select: 'name email profile_pic', // Populate specific fields from User
+            })
+            .populate({
+                path: 'reaction',
+                select: 'name email profile_pic', // Populate specific fields from User for reactions
+            })
+            .sort({ createdAt: -1 }); // Sort by creation date (latest first)
+
+        if (!blogs || blogs.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No blogs found for the user",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Blogs retrieved successfully",
+            data: blogs,
+        });
+    } catch (error) {
+        console.error("Error fetching blogs:", error);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching blogs",
+            error: error.message,
+        });
+    }
+};
+
+
+
+
+
 // Delete a blog
 export const deleteBlog = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { blogId } = req.params;
+        const { id } = req.user
+        // console.log(blogId , id);
+        
+        const blog = await Blogs.findById(blogId);
 
-        const blog = await Blogs.findById(id);
         if (!blog) {
             return res.status(404).json({
                 message: "Blog not found!",
                 success: false,
             });
         }
+        // console.log(id , blog.user);
+        
+        // if authenticate user and blog poster are not same user !
+       if( id !== blog.user.toString()){
+
+        return res.status(403).json({
+            message: "UnAutherized Access!",
+            success: false,
+        });
+
+       }
 
         // Delete associated image if present
         if (blog.image?.public_id) {
@@ -161,6 +222,7 @@ export const deleteBlog = async (req, res) => {
         res.status(200).json({
             message: "Blog deleted successfully!",
             success: true,
+            data: blog
         });
     } catch (error) {
         console.error(error);
@@ -174,10 +236,11 @@ export const deleteBlog = async (req, res) => {
 // Update a blog
 export const updateBlog = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { title, content, file } = req.body;
+        const { blogId } = req.params;
+        const  { id } = req.user ; 
+        const { title, content, image } = req.body;
 
-        const blog = await Blogs.findById(id);
+        const blog = await Blogs.findById(blogId);
         if (!blog) {
             return res.status(404).json({
                 message: "Blog not found!",
@@ -185,8 +248,18 @@ export const updateBlog = async (req, res) => {
             });
         }
 
+          // if authenticate user and blog poster are not same user !
+       if( id !== blog.user.toString()){
+
+        return res.status(403).json({
+            message: "UnAutherized Access!",
+            success: false,
+        });
+
+       }
+
         // Handle image update
-        if (file) {
+        if (image) {
             // Delete old image
             if (blog.image?.public_id) {
                 const isDestroyed = await fileDestroy(blog.image.public_id);
@@ -198,7 +271,7 @@ export const updateBlog = async (req, res) => {
                 }
             }
             // Upload new image
-            const { url, public_id, error } = await fileUploader(file);
+            const { url, public_id, error } = await fileUploader(image);
             if (error) {
                 return res.status(400).json({
                     message: "Failed to upload new image!",
@@ -214,10 +287,10 @@ export const updateBlog = async (req, res) => {
 
         await blog.save();
 
-        res.status(200).json({
+       return  res.status(200).json({
             message: "Blog updated successfully!",
             success: true,
-            blog,
+            data : blog,
         });
     } catch (error) {
         console.error(error);

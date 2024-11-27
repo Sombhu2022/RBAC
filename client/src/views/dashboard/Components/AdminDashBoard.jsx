@@ -11,10 +11,15 @@ function AdminDashBoard() {
   const [selectedPosts, setSelectedPosts] = useState([]);
   const [showPostsModal, setShowPostsModal] = useState(false);
 
+  // Handle role change
+  const handleRoleChange = (userId, newRole) => {
+    dispatch(updateUserRole({ userId, newRole }))
+  };
+
   // Fetch all users and their posts
   useEffect(() => {
     dispatch(fetchAllUserWithPost());
-  }, [dispatch]);
+  }, [dispatch , status.updateUserRole]);
 
   // Toast notifications based on status
   useEffect(() => {
@@ -27,10 +32,7 @@ function AdminDashBoard() {
     
   }, [status, message]);
 
-  // Handle role change
-  const handleRoleChange = (userId, newRole) => {
-    dispatch(updateUserRole({ userId, newRole }))
-  };
+  
 
 
   // Show posts in modal
