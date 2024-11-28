@@ -2,7 +2,7 @@ import express from "express";
 import "dotenv/config";
 import { corsConfig } from "./src/config/cors.config.js";
 import { rateLimit } from "./src/middlewares/rateLimit.middleware.js";
-import { basicRouter } from "./src/routes/basic.router.js";
+
 import { dbConection } from "./src/database/connection.js";
 import { userRouter } from "./src/routes/user.router.js";
 import bodyParser from "body-parser";
@@ -10,7 +10,7 @@ import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
 import { blogRouter } from "./src/routes/blog.router.js";
 import { cloudinaryConfig } from "./src/config/cloudinar.config.js";
-import { v2 as cloudinary } from "cloudinary";
+
 import { reportRouter } from "./src/routes/report.router.js";
 
 
@@ -44,10 +44,9 @@ const startServer = async () => {
     await dbConection();
 
     // Use rate limit middleware globally - for prevent DDOS attack and bots detaction 
-    // app.use(rateLimit);
+    app.use('/api/v1', rateLimit);
 
     // Define routes
-    app.use('/api/v1/data' , basicRouter )
     app.use('/api/v1/user' , userRouter)
     app.use('/api/v1/blog' , blogRouter)
     app.use('/api/v1/report' , reportRouter)
