@@ -1,7 +1,7 @@
 import express from 'express'
 
-import { addBlog, deleteBlog, fetchAllBlogs, fetchAllBlogsOfEachUser, fetchBlogById, updateBlog } from '../controllers/blog.controller.js'
-import { isAuthenticate } from '../middlewares/authentication.js'
+import { addBlog, blockABlogPost, deleteBlog, fetchAllBlogs, fetchAllBlogsOfEachUser, fetchBlogById, reactToBlog, updateBlog } from '../controllers/blog.controller.js'
+import { authorizeRoles, isAuthenticate } from '../middlewares/authentication.js'
 
 
 const router = express.Router()
@@ -13,6 +13,8 @@ router
    .get('/myblog/all', isAuthenticate , fetchAllBlogsOfEachUser )
    .delete('/:blogId' , isAuthenticate , deleteBlog)
    .patch('/:blogId' , isAuthenticate , updateBlog)
-
+    
+   .patch('/reaction/:blogId' , isAuthenticate , reactToBlog )
+   .patch('/block-post/:blogId' , isAuthenticate , authorizeRoles('admin' , 'controller') , blockABlogPost)
 
 export const blogRouter = router

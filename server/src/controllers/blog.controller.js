@@ -1,4 +1,5 @@
 import { Blogs } from '../models/blog.model.js'; // Assuming you have a Blog model
+import { Reports } from '../models/report.model.js';
 import { fileDestroy, fileUploader } from '../utils/fileUpload.js';
 
 // Add a new blog with or without an image
@@ -38,12 +39,22 @@ export const addBlog = async (req, res) => {
             user:id ,
             title,
             image:tempImage,
-        });
+        })
+
+        const populateBlog = await Blogs.findById(blog._id).populate({
+            path: 'user',
+            select: 'name email profile_pic', // Populate specific fields from User
+        })
+        .populate({
+            path: 'reactions',
+            select: 'name email profile_pic', // Populate specific fields from User for reactions
+        })
+        .exec();
 
         res.status(201).json({
             message: "Blog created successfully!",
             success: true,
-            data:blog,
+            data:populateBlog,
         });
     } catch (error) {
         console.error(error);
@@ -60,14 +71,14 @@ export const addBlog = async (req, res) => {
 // find all blogs 
 export const fetchAllBlogs = async (req, res) => {
     try {
-        // Fetch blogs and populate the fields
-        const blogs = await Blogs.find({})
+        // Fetch blogs if this block is not Blocked and populate the fields
+        const blogs = await Blogs.find({isBlock:false})
             .populate({
                 path: 'user',
                 select: 'name email profile_pic', // Populate only specific fields from User
             })
             .populate({
-                path: 'reaction',
+                path: 'reactions',
                 select: 'name email profile_pic', // Populate only specific fields from User for reactions
             })
             .sort({ createdAt: -1 }); // Sort by creation date (latest first)
@@ -107,7 +118,7 @@ export const fetchBlogById = async (req, res) => {
                 select: 'name email profile_pic', // Populate only specific fields from User
             })
             .populate({
-                path: 'reaction',
+                path: 'reactions',
                 select: 'name email profile_pic', // Populate only specific fields from User for reactions
             })
             
@@ -149,7 +160,7 @@ export const fetchAllBlogsOfEachUser = async (req, res) => {
                 select: 'name email profile_pic', // Populate specific fields from User
             })
             .populate({
-                path: 'reaction',
+                path: 'reactions',
                 select: 'name email profile_pic', // Populate specific fields from User for reactions
             })
             .sort({ createdAt: -1 }); // Sort by creation date (latest first)
@@ -287,10 +298,21 @@ export const updateBlog = async (req, res) => {
 
         await blog.save();
 
+        const populateBlog = await Blogs.findById(blog._id).populate({
+            path: 'user',
+            select: 'name email profile_pic', // Populate specific fields from User
+        })
+        .populate({
+            path: 'reactions',
+            select: 'name email profile_pic', // Populate specific fields from User for reactions
+        })
+        .exec();
+
+
        return  res.status(200).json({
             message: "Blog updated successfully!",
             success: true,
-            data : blog,
+            data : populateBlog,
         });
     } catch (error) {
         console.error(error);
@@ -304,17 +326,11 @@ export const updateBlog = async (req, res) => {
 // React to a blog (like/dislike)
 export const reactToBlog = async (req, res) => {
     try {
-        const { id } = req.params; // Blog ID
-        const { reaction } = req.body; // Reaction type (e.g., 'like' or 'dislike')
+        const { blogId } = req.params; // Blog ID
+        const { id } = req.user
+        const { isReaction } = req.body ;
 
-        if (!['like', 'dislike'].includes(reaction)) {
-            return res.status(400).json({
-                message: "Invalid reaction type!",
-                success: false,
-            });
-        }
-
-        const blog = await Blogs.findById(id);
+        const blog = await Blogs.findById(blogId);
         if (!blog) {
             return res.status(404).json({
                 message: "Blog not found!",
@@ -322,18 +338,37 @@ export const reactToBlog = async (req, res) => {
             });
         }
 
-        if (reaction === 'like') {
-            blog.likes += 1;
-        } else if (reaction === 'dislike') {
-            blog.dislikes += 1;
-        }
+       // Add the reaction if not already present
+       const reactionIndex = blog.reactions.findIndex(
+        (reaction) => reaction.toString() === id.toString()
+      );
+      let status =''
+      if (reactionIndex === -1) {
+        // User has not reacted yet, add the reaction
+        blog.reactions.push(id); // Push user ID as ObjectId
+        status = 'Added'
+      } else {
+        // If user has already reacted, you can either remove or update the reaction
+        blog.reactions.splice(reactionIndex, 1); // Remove the reaction
+        status = 'Delete'
+      }
 
-        await blog.save();
+        // Save the blog with the updated reactions
+        await blog.save()
+        
+        const populateBlog = await Blogs.findById(blog._id).populate({
+            path: 'user',
+            select: 'name email profile_pic', // Populate specific fields from User
+        })
+        .populate({
+            path: 'reactions',
+            select: 'name email profile_pic', // Populate specific fields from User for reactions
+        })
 
         res.status(200).json({
-            message: `Blog ${reaction}d successfully!`,
+            message: `Blog reaction ${status} successfully!`,
             success: true,
-            blog,
+            data:populateBlog,
         });
     } catch (error) {
         console.error(error);
@@ -342,4 +377,39 @@ export const reactToBlog = async (req, res) => {
             success: false,
         });
     }
+};
+
+
+// post block 
+
+// Block a blog and update all related reports
+export const blockABlogPost = async (req, res) => {
+  try {
+    const { blogId } = req.params;
+
+    // Update the blog to set it as blocked
+    const blog = await Blogs.findByIdAndUpdate(
+      { _id: blogId },
+      { $set: { isBlock: true } },
+      { new: true }
+    );
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    // Find all reports related to the blog
+    const reports = await Reports.updateMany(
+      { reportedOn:blogId }, // Filter reports by blogId
+      { $set: { status: "Resolved" } } // Update the status to Resolved
+    );
+
+    // Respond with success message
+    res.status(200).json({
+      message: "Blog has been blocked successfully, and all related reports are updated.",
+      updatedReports: reports.modifiedCount,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
 };

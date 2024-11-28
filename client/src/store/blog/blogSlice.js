@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createBlog, deleteBlog, fetchAllBlogs, fetchAllBlogsOfEachUser, fetchBlogByBlogId, updateBlog } from "./blogController";
+import { addNewReaction, blockABlogPost, createBlog, deleteBlog, fetchAllBlogs, fetchAllBlogsOfEachUser, fetchBlogByBlogId, updateBlog } from "./blogController";
 
 const initialState = {
     blogs: [],
@@ -13,7 +13,10 @@ const initialState = {
         fetchBlogByBlogId: '',
         fetchAllBlogsOfEachUser: '',
         deleteBlog: '',
-        updateBlog: ''
+        updateBlog: '',
+        blockABlogPost: '',
+        addNewReaction:'' ,
+        
     },
     loading: {
         createBlogLoading: false,
@@ -21,7 +24,9 @@ const initialState = {
         fetchBlogByBlogIdLoading: false,
         fetchAllBlogsOfEachUserLoading: false,
         deleteBlogLoading: false,
-        updateBlogLoading: false
+        updateBlogLoading: false,
+        blockABlogPostLoading:false,
+        addNewReactionLoading:false ,
     }
 };
 
@@ -32,7 +37,13 @@ export const blogSlice = createSlice({
         resetBlogState: (state) => {
             state.error = "";
             state.message = "";
-            state.status = { createBlog: "", fetchAllBlog: "" };
+            state.status = { createBlog: "",
+                fetchAllBlog: "",
+                fetchBlogByBlogId: '',
+                fetchAllBlogsOfEachUser: '',
+                deleteBlog: '',
+                updateBlog: '',
+                blockABlogPost: '' };
         }
     },
     extraReducers: (builder) => {
@@ -179,7 +190,65 @@ export const blogSlice = createSlice({
                 state.status.updateBlog = "rejected";
                 state.message = message || "Blog update failed!";
                 state.error = error || "Unknown error occurred.";
+            })
+
+
+         // add reaction 
+            .addCase(addNewReaction.pending, (state) => {
+                state.loading.addNewReactionLoading = true;
+                state.status.addNewReaction = "pending";
+            })
+            .addCase(addNewReaction.fulfilled, (state, action) => {
+                const { data, message } = action.payload;
+                state.loading.addNewReactionLoading = false;
+                state.status.addNewReaction = "success";
+            
+                // Update the blog in `myBlogs` if it exists
+                state.myBlogs = state.myBlogs.map((blog) => 
+                    blog._id === data._id ? data: blog
+                );
+            
+                // Update the blog in `blogs` if it exists
+                state.blogs = state.blogs.map((blog) => 
+                    blog._id === data._id ? data : blog
+                );
+            
+                // Update the currently viewed blog if it matches the updated blog
+                if (state.blog._id === data._id) {
+                    state.blog = data
+                }
+            
+                state.message = message || "Blog updated successfully!";
+            })
+            .addCase(addNewReaction.rejected, (state, action) => {
+                const { error, message } = action.payload || {};
+                state.loading.addNewReactionLoading = false;
+                state.status.addNewReaction = "rejected";
+                state.message = message || "Blog update failed!";
+                state.error = error || "Unknown error occurred.";
+            })
+
+         // update blog 
+            .addCase(blockABlogPost.pending, (state) => {
+                state.loading.blockABlogPostLoading = true;
+                state.status.blockABlogPost = "pending";
+            })
+            .addCase(blockABlogPost.fulfilled, (state, action) => {
+                const {  message } = action.payload;
+                state.loading.blockABlogPostLoading = false;
+                state.status.blockABlogPost = "success";    
+                state.message = message || "Blog updated successfully!";
+            })
+            .addCase(blockABlogPost.rejected, (state, action) => {
+                const { error, message } = action.payload || {};
+                state.loading.blockABlogPostLoading = false;
+                state.status.blockABlogPost = "rejected";
+                state.message = message || "Blog update failed!";
+                state.error = error || "Unknown error occurred.";
             });
+         
+
+            
             
     }
 });

@@ -172,3 +172,59 @@ export const updateBlog  = createAsyncThunk(
         }
     }
 );
+
+
+export const blockABlogPost  = createAsyncThunk(
+    'blog/blockABlogPost',
+    async ({blogId , isBlock }, { rejectWithValue }) => {
+        try {
+            const {data} = await axios.patch(
+                `${baseUrl}/blog/block-post/${blogId}`,{ isBlock},
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            );
+            console.log("show data", data);
+            return data;
+        } catch (error) {
+            // If the error is from Axios, it will have a response property
+            console.error('error', error)
+            if (axios.isAxiosError(error) && error.response) {
+                return rejectWithValue(error.response.data);
+            }
+            // For other types of errors
+            return rejectWithValue('An unexpected error occurred');
+        }
+    }
+);
+
+
+export const addNewReaction  = createAsyncThunk(
+    'blog/reactToBlock',
+    async ({blogId , isReaction  }, { rejectWithValue }) => {
+        try {
+            const {data} = await axios.patch(
+                `${baseUrl}/blog/reaction/${blogId}`,{ isReaction },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                }
+            );
+            console.log("show data", data);
+            return data;
+        } catch (error) {
+            // If the error is from Axios, it will have a response property
+            console.error('error', error)
+            if (axios.isAxiosError(error) && error.response) {
+                return rejectWithValue(error.response.data);
+            }
+            // For other types of errors
+            return rejectWithValue('An unexpected error occurred');
+        }
+    }
+);

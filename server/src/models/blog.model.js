@@ -34,13 +34,18 @@ const blogSchema = new Schema(
         },
       ],
 
-      reaction:[
+      reactions:[
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "user", // Reference to the User model
             required: true,
         }
-      ]
+      ],
+      
+      isBlock :{
+        type: Boolean ,
+        default:false
+      }
 
     },
 

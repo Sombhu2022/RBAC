@@ -39,14 +39,6 @@ function Blog({ blog }) {
     navigate(`/blog/edit/${blogId}`);
   };
 
-  // Toggle reaction popup
-  const handleReactionClick = () => {
-    if (user.isAuthenticate) {
-      setShowReactionPopup(!showReactionPopup);
-    } else {
-      toast.info("Login first! Then access this feature.");
-    }
-  };
 
   // Handle dropdown visibility
   const toggleDropdown = () => {
@@ -163,11 +155,7 @@ function Blog({ blog }) {
       <div className="px-5 py-3 bg-gray-50 flex justify-between items-center">
         <div className="flex items-center space-x-4 text-gray-600">
           <div className="flex items-center">
-            <FaHeart
-              className="mr-1 text-red-500 cursor-pointer"
-              onClick={handleReactionClick}
-            />
-            <span>{blog.reaction.length}</span>
+           <AddReactions blog={blog} />
           </div>
           <div className="flex items-center">
             <FaRegComment className="mr-1 text-blue-500" />
@@ -186,14 +174,6 @@ function Blog({ blog }) {
           </Link>
         </div>
       </div>
-
-      {/* Reaction Popup */}
-      {user.isAuthenticate && (
-        <AddReactions
-          onClose={() => setShowReactionPopup(false)}
-          isShow={showReactionPopup}
-        />
-      )}
 
       {/* Comment Section */}
       <div className="p-5 bg-gray-50">
