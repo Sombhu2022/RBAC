@@ -86,7 +86,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Sombhu2022/CodeCanvas.git
+   git clone https://github.com/Sombhu2022/RBAC.git CodeCanvas
    cd CodeCanvas/server
    ```
 
@@ -113,7 +113,7 @@
 
 4. Start the backend server:
    ```bash
-   npm start
+   npm run dev
    ```
 
 ### Frontend Setup
