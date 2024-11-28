@@ -22,6 +22,7 @@
 
 **CodeCanvas** is a cutting-edge web application built using the MERN stack (MongoDB, Express.js, React.js, and Node.js). It aims to create a vibrant community for developers and programmers to share trending technologies, code snippets, and technical insights. With its robust features like role-based access control, rate limiting, and two-factor authentication, CodeCanvas ensures a secure and engaging experience for users.
 
+
 ## 🎯 Goals
 
 1. Foster a collaborative and engaging community for developers.
@@ -40,13 +41,19 @@
 - Two-factor authentication for enhanced security.
 - Rate limiting to prevent abuse and ensure application stability.
 
+![Authentication ](./client/public/image/register.png)
+
 ### 3. Post Sharing and Reactions
 - Share trending technologies, code snippets, and technical content.
 - Engage with posts using interactive reactions .
 
+![Post Blog](./client/public/image/add_blog.png)
+
 ### 4. Post Reporting System
 - Report unusual or inappropriate posts.
 - Admin and Controllers can review and take necessary actions.
+
+![Report for Post ](./client/public/image/add_report.png)
 
 ### 5. Custom Dashboards
 - Role-specific dashboards to enhance user experience.
@@ -54,9 +61,22 @@
 - Controller: Controller reported posts and ensure content quality.
 - User: Post, react, and explore shared content.
 
+![Admin Dashboard](./client/public/image/admin_dashboard.png)
+![Controller Dashboard](./client/public/image/controller_dashboard.png)
+![User Dashboard](./client/public/image/user_dashboard.png)
+
 ### 6. Media Handling
 - Cloudinary integration for seamless media uploads and management.
 - Efficient handling of images and videos in posts.
+
+### Responsive Design Features
+
+- This project includes a fully responsive design to ensure an optimal user experience across all devices, from desktops to smartphones. 
+
+![Mobile view](./client/public/image/blog_mb.png)
+![Mobile view](./client/public/image/profile_mb.png)
+![Tab view](./client/public/image/tab_view.png)
+
 
 ## 🛠️ Technologies Used
 
