@@ -103,13 +103,12 @@
    CLOUDINARY_API_KEY=your_cloudinary_api_key
    CLOUDINARY_API_SECRET=your_cloudinary_api_secret
    ARCJET_ENV = development
-ARCJET_KEY = your api key
-
-MAIL_HOST=
-MAIL_PORT=
-MAIL_NAME= 
-MAIL_PASS=
-MAIL_SERVICE =
+   ARCJET_KEY = your api key
+   MAIL_HOST=
+   MAIL_PORT=
+   MAIL_NAME= 
+   MAIL_PASS=
+   MAIL_SERVICE =
    ```
 
 4. Start the backend server:
@@ -134,34 +133,6 @@ MAIL_SERVICE =
    npm run dev
    ```
 
-## 🔄 Application Workflow
-
-1. **User Registration and Login:**
-   - Users sign up with secure credentials and two-factor authentication.
-
-2. **Post Creation:**
-   - Users share content, including images uploaded via Cloudinary.
-
-3. **Community Interaction:**
-   - Users react to posts or report inappropriate content.
-
-4. **Content Moderation:**
-   - Admins and controller manage reported posts through their respective dashboards.
-
-## 🌟 Future Enhancements
-
-- Real-Time Notifications
-- Comment in Post 
-- AI-Powered Post Moderation
-- Mobile App
-
-
-
-## 📧 Contact
-
-- **Name:** Sombhu Das
-- **GitHub:** [Sombhu2022](https://github.com/Sombhu2022)
-- **Email:** sombhudas93@gmail.com
 
 ## API Documentation
 
@@ -324,5 +295,35 @@ Base URL: `/api/v1/report`
 3. **PATCH /status/:reportId** - Updates the status of a specific report (admin or controller only).
 
 Note: Endpoints marked with "Required" authentication use the `isAuthenticate` middleware. Some operations use both `isAuthenticate` and `authorizeRoles('admin', 'controller')` middlewares for additional authorization.
+
+
+## 🔄 Application Workflow
+
+1. **User Registration and Login:**
+   - Users sign up with secure credentials and two-factor authentication.
+
+2. **Post Creation:**
+   - Users share content, including images uploaded via Cloudinary.
+
+3. **Community Interaction:**
+   - Users react to posts or report inappropriate content.
+
+4. **Content Moderation:**
+   - Admins and controller manage reported posts through their respective dashboards.
+
+## 🌟 Future Enhancements
+
+- Real-Time Notifications
+- Comment in Post 
+- AI-Powered Post Moderation
+- Mobile App
+
+
+
+## 📧 Contact
+
+- **Name:** Sombhu Das
+- **GitHub:** [Sombhu2022](https://github.com/Sombhu2022)
+- **Email:** sombhudas93@gmail.com
 
 
