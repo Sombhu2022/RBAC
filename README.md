@@ -1,107 +1,167 @@
-﻿# CodeCanvas 🌐👨‍💻  
+# CodeCanvas 🌐👨‍💻
 
-**Empowering Developers Through Collaboration**  
+**Empowering Developers Through Collaboration**
 
----
+## Table of Contents
 
-## Table of Contents  
+- [Introduction](#introduction)
+- [Goals](#goals)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Setup and Installation](#setup-and-installation)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
+- [Application Workflow](#application-workflow)
+- [Folder Structure](#folder-structure)
+- [API Documentation](#api-documentation)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [Contact](#contact)
 
-- [Introduction](#introduction)  
-- [Goals](#goals)  
-- [Features](#features)  
-- [Technologies Used](#technologies-used)  
-- [Setup and Installation](#setup-and-installation)  
-  - [Backend Setup](#backend-setup)  
-  - [Frontend Setup](#frontend-setup)  
-- [Application Workflow](#application-workflow)  
-- [Folder Structure](#folder-structure)  
-- [Future Enhancements](#future-enhancements)  
-- [Contributing](#contributing)  
-- [Contact](#contact)  
+## 📘 Introduction
 
----
+**CodeCanvas** is a cutting-edge web application built using the MERN stack (MongoDB, Express.js, React.js, and Node.js). It aims to create a vibrant community for developers and programmers to share trending technologies, code snippets, and technical insights. With its robust features like role-based access control, rate limiting, and two-factor authentication, CodeCanvas ensures a secure and engaging experience for users.
 
-## 📘 Introduction  
+## 🎯 Goals
 
-**CodeCanvas** is a cutting-edge web application built using the MERN stack (MongoDB, Express.js, React.js, and Node.js). It aims to create a vibrant community for developers and programmers to share trending technologies, code snippets, and technical insights. With its robust features like role-based access control, rate limiting, and two-factor authentication, CodeCanvas ensures a secure and engaging experience for users.  
+1. Foster a collaborative and engaging community for developers.
+2. Enable users to share and discover trending technologies, code snippets, and technical content.
+3. Ensure a **secure, scalable, and user-friendly platform** with features like two-factor authentication and role-based dashboards.
+4. Provide tools for **content moderation** through a post-reporting system.
 
----
+## ⚙️ Features
 
-## 🎯 Goals  
+### 1. Role-Based Access Control (RBAC)
+- Assign roles (Admin, Controller , User) with specific permissions.
+- Manage access to features and dashboards based on roles.
 
-1. Foster a collaborative and engaging community for developers.  
-2. Enable users to share and discover trending technologies, code snippets, and technical content.  
-3. Ensure a **secure, scalable, and user-friendly platform** with features like two-factor authentication and role-based dashboards.  
-4. Provide tools for **content moderation** through a post-reporting system.  
+### 2. Authentication and Security
+- Secure user authentication with JWT (JSON Web Tokens).
+- Two-factor authentication for enhanced security.
+- Rate limiting to prevent abuse and ensure application stability.
 
----
+### 3. Post Sharing and Reactions
+- Share trending technologies, code snippets, and technical content.
+- Engage with posts using interactive reactions .
 
-## ⚙️ Features  
+### 4. Post Reporting System
+- Report unusual or inappropriate posts.
+- Admin and Controllers can review and take necessary actions.
 
-### **1. Role-Based Access Control (RBAC)**  
-- Assign roles (Admin, Moderator, User) with specific permissions.  
-- Manage access to features and dashboards based on roles.  
+### 5. Custom Dashboards
+- Role-specific dashboards to enhance user experience.
+- Admin: Manage users, roles, and reported posts.
+- Controller: Controller reported posts and ensure content quality.
+- User: Post, react, and explore shared content.
 
-### **2. Authentication and Security**  
-- Secure user authentication with JWT (JSON Web Tokens).  
-- Two-factor authentication for enhanced security.  
-- Rate limiting to prevent abuse and ensure application stability.  
+### 6. Media Handling
+- Cloudinary integration for seamless media uploads and management.
+- Efficient handling of images and videos in posts.
 
-### **3. Post Sharing and Reactions**  
-- Share trending technologies, code snippets, and technical content.  
-- Engage with posts using interactive reactions (like, love, etc.).  
+## 🛠️ Technologies Used
 
-### **4. Post Reporting System**  
-- Report unusual or inappropriate posts.  
-- Admins and moderators can review and take necessary actions.  
+### Frontend
+- **React.js**
+- **Redux Toolkit**
+- **Tailwind CSS**
 
-### **5. Custom Dashboards**  
-- Role-specific dashboards to enhance user experience.  
-- Admin: Manage users, roles, and reported posts.  
-- Moderator: Moderate reported posts and ensure content quality.  
-- User: Post, react, and explore shared content.  
+### Backend
+- **Node.js**
+- **Express.js**
+- **Mongoose**
 
-### **6. Media Handling**  
-- Cloudinary integration for seamless media uploads and management.  
-- Efficient handling of images and videos in posts.  
+### Database
+- **MongoDB**
 
----
+### Additional Libraries and Tools
+- **JWT** for secure authentication
+- **Bcrypt.js** for password hashing
+- **Cloudinary** for media uploads
+- **Rate Limiter** for request throttling
+- **ARCJET** for Rate Limiting 
 
-## 🛠️ Technologies Used  
+## ⚡ Setup and Installation
 
-### **Frontend**  
-- **React.js**  
-- **Redux Toolkit**  
-- **Tailwind CSS**  
+### Backend Setup
 
-### **Backend**  
-- **Node.js**  
-- **Express.js**  
-- **Mongoose**  
-
-### **Database**  
-- **MongoDB**  
-
-### **Additional Libraries and Tools**  
-- **JWT** for secure authentication  
-- **Bcrypt.js** for password hashing  
-- **Cloudinary** for media uploads  
-- **Rate Limiter** for request throttling  
-- **Socket.IO** for real-time interactions  
-
----
-
-## ⚡ Setup and Installation  
-
-### Backend Setup  
-
-1. Clone the repository:  
+1. Clone the repository:
    ```bash
    git clone https://github.com/Sombhu2022/CodeCanvas.git
    cd CodeCanvas/server
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure environment variables in a .env file:
+   ```env
+   PORT=5000
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   ARCJET_ENV = development
+ARCJET_KEY = your api key
+
+MAIL_HOST=
+MAIL_PORT=
+MAIL_NAME= 
+MAIL_PASS=
+MAIL_SERVICE =
+   ```
+
+4. Start the backend server:
+   ```bash
+   npm start
+   ```
+
+### Frontend Setup
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd ../client
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## 🔄 Application Workflow
+
+1. **User Registration and Login:**
+   - Users sign up with secure credentials and two-factor authentication.
+
+2. **Post Creation:**
+   - Users share content, including images uploaded via Cloudinary.
+
+3. **Community Interaction:**
+   - Users react to posts or report inappropriate content.
+
+4. **Content Moderation:**
+   - Admins and controller manage reported posts through their respective dashboards.
+
+## 🌟 Future Enhancements
+
+- Real-Time Notifications
+- Comment in Post 
+- AI-Powered Post Moderation
+- Mobile App
 
 
 
+## 📧 Contact
+
+- **Name:** Sombhu Das
+- **GitHub:** [Sombhu2022](https://github.com/Sombhu2022)
+- **Email:** sombhudas93@gmail.com
 
 ## API Documentation
 
