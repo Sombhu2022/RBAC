@@ -7,6 +7,6 @@ const router = express.Router()
 router
     .post('/' , isAuthenticate , addNewReport )
     .get('/' , isAuthenticate , authorizeRoles('controller' , 'admin') , fetchAllReport)
-    .patch('/:reportId' , isAuthenticate , authorizeRoles('controller' , 'admin') , updateReportStatus)
+    .patch('/status/:reportId' , isAuthenticate , authorizeRoles('controller' , 'admin') , updateReportStatus)
 
 export const reportRouter = router

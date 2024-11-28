@@ -1,39 +1,49 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
+import { FaHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewReaction } from "../../../store/blog/blogController";
+import { toast } from "react-toastify";
 
-function AddReactions({onClose , isShow}) {
- 
-    const [selectedReaction, setSelectedReaction] = useState("");
+function AddReactions({ blog = {} }) {
+  const [isReaction, setIsReaction] = useState(false); // Whether the user has reacted
+  const { user, isAuthenticate } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isAuthenticate && blog.reactions) {
+      // Check if the user has reacted
+      const userReaction = blog.reactions.find(
+        (reaction) => reaction._id.toString() === user._id.toString()
+      );
   
-    // Handle selection of a reaction
-    const handleReactionSelect = (reaction) => {
-      setSelectedReaction(reaction);
-      // Close the popup after selecting a reaction
-      onClose()
-    };
-    // Available reactions (Emojis)
-    const reactions = [
-      { emoji: "👍", name: "Like" },
-      { emoji: "❤️", name: "Love" },
-      { emoji: "😂", name: "Haha" },
-      { emoji: "😢", name: "Sad" },
-      { emoji: "😮", name: "Surprised" }
-    ];
+      setIsReaction(!!userReaction); // Update the reaction state (true if userReaction is not undefined)
+    } else if (!isAuthenticate) {
+      toast.info("Login first! Then access this feature.");
+      setIsReaction(false); // Reset reaction state if not authenticated
+    }
+  }, [blog, isAuthenticate, user]);
+  
+
+  const handleReactionClick = () => {
+    if (isAuthenticate) {
+      const blogId = blog._id;
+      // If already reacted, remove reaction, otherwise add
+      dispatch(addNewReaction({ blogId, isReaction }));
+      setIsReaction((prev) => !prev); // Toggle the reaction state
+    } else {
+      toast.info("Login first! Then access this feature.");
+    }
+  };
+
   return (
-    <div>
-        { isShow && (
-        <div className="absolute bg-white shadow-lg rounded-lg p-4 mt-3 space-x-4 flex items-center">
-          {reactions.map((reaction, index) => (
-            <button
-              key={index}
-              className="text-2xl hover:bg-slate-200 hover:rounded-full p-2"
-              onClick={() => handleReactionSelect(reaction.name)}
-            >
-              {reaction.emoji}
-            </button>
-          ))}
-        </div>
-      )}</div>
-  )
+    <>
+      <FaHeart
+        className={`${isReaction ? "text-red-600" : "text-gray-400"} cursor-pointer`}
+        onClick={handleReactionClick} // Use the click handler for toggling reaction
+      />
+      <span>{blog.reactions?.length}</span> {/* Display number of reactions */}
+    </>
+  );
 }
 
-export default AddReactions
+export default AddReactions;

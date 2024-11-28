@@ -20,7 +20,7 @@ const reportSchema = new Schema(
     },
     reportedOn: {
       type: mongoose.Schema.Types.ObjectId,
-      refPath: 'blog',
+      ref: 'blog',
       required: true,
     },
     status: {
