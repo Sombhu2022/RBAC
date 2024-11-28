@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { CiSettings } from "react-icons/ci";
 import { deleteBlog } from "../../../store/blog/blogController";
 import AddReport from "../../report/AddReport";
+import { resetBlogState } from "../../../store/blog/blogSlice";
 
 function Blog({ blog }) {
   const user = useSelector((state) => state.user);
