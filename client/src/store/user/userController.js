@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { baseUrl } from "../../App";
+
 
 
 
@@ -9,7 +9,7 @@ export const regUser = createAsyncThunk(
     async ({ name, password, email }, { rejectWithValue }) => {
         try {
             const {data} = await axios.post(
-                `${baseUrl}/user`,
+                `/api/v1/user`,
                 { name, password, email },
 
                 {
@@ -40,7 +40,7 @@ export const authenticateUser = createAsyncThunk(
     async (_ , { rejectWithValue }) => {
         try {
             const { data } = await axios.get(
-                `${baseUrl}/user`,
+                `/api/v1/user`,
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ export const fetchAllUserWithPost = createAsyncThunk(
     async (_ , { rejectWithValue }) => {
         try {
             const { data } = await axios.get(
-                `${baseUrl}/user/all`,
+                `/api/v1/user/all`,
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -93,7 +93,7 @@ export const loginUser  = createAsyncThunk(
     async ({ email , password} , { rejectWithValue }) => {
         try {
             const { data } = await axios.post(
-                `${baseUrl}/user/login`, { email , password} ,
+                `/api/v1/user/login`, { email , password} ,
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -120,7 +120,7 @@ export const logoutUser  = createAsyncThunk(
     async ( _ , { rejectWithValue }) => {
         try {
             const { data } = await axios.get(
-                `${baseUrl}/user/logout`, 
+                `/api/v1/user/logout`, 
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -148,7 +148,7 @@ export const sendOtpForProfileValidation  = createAsyncThunk(
     async ( {email} , { rejectWithValue }) => {
         try {
             const { data } = await axios.post(
-                `${baseUrl}/user/send-otp`, {email},
+                `/api/v1/user/send-otp`, {email},
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -175,7 +175,7 @@ export const verifyOtpForProfileValidation  = createAsyncThunk(
     async ( {otp , email} , { rejectWithValue }) => {
         try {
             const { data } = await axios.post(
-                `${baseUrl}/user/verify-otp`, {otp , email},
+                `/api/v1/user/verify-otp`, {otp , email},
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -202,7 +202,7 @@ export const addTwoStepVerification  = createAsyncThunk(
     async ( {isTwoStepAuth} , { rejectWithValue }) => {
         try {
             const { data } = await axios.post(
-                `${baseUrl}/user/twostep-verify`, {isTwoStepAuth},
+                `/api/v1/user/twostep-verify`, {isTwoStepAuth},
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -230,7 +230,7 @@ export const updateUserRole  = createAsyncThunk(
     async ( {userId , newRole} , { rejectWithValue }) => {
         try {
             const { data } = await axios.post(
-                `${baseUrl}/user/update-role/${userId}`, {newRole},
+                `/api/v1/user/update-role/${userId}`, {newRole},
                 {
                     headers: {
                         'Content-Type': 'application/json'

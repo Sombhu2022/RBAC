@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { baseUrl } from "../../App";
+
 
 // add new Report 
 export const addNewReport  = createAsyncThunk(
@@ -8,7 +8,7 @@ export const addNewReport  = createAsyncThunk(
     async ( {reportType, description, reportedOn} , { rejectWithValue }) => {
         try {
             const { data } = await axios.post(
-                `${baseUrl}/report`, {reportType, description, reportedOn},
+                `/api/v1/report`, {reportType, description, reportedOn},
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ export const fetchAllReport   = createAsyncThunk(
     async ( _ , { rejectWithValue }) => {
         try {
             const { data } = await axios.get(
-                `${baseUrl}/report`,
+                `/api/v1/report`,
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ export const updateReportStatus   = createAsyncThunk(
     async ({  status , resolutionNotes , reportId } , { rejectWithValue }) => {
         try {
             const { data } = await axios.patch(
-                `${baseUrl}/report/status/${reportId}`,{  status , resolutionNotes },
+                `/api/v1/report/status/${reportId}`,{  status , resolutionNotes },
                 {
                     headers: {
                         'Content-Type': 'application/json'
