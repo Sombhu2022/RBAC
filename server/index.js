@@ -44,12 +44,12 @@ const startServer = async () => {
     await dbConection();
 
     // Use rate limit middleware globally - for prevent DDOS attack and bots detaction 
-    app.use('/api/v1', rateLimit);
+    // app.use('/api/v1', rateLimit);
 
     // Define routes
-    app.use('/api/v1/user' , userRouter)
-    app.use('/api/v1/blog' , blogRouter)
-    app.use('/api/v1/report' , reportRouter)
+    app.use('/api/v1/user' , rateLimit , userRouter)
+    app.use('/api/v1/blog' , rateLimit , blogRouter)
+    app.use('/api/v1/report' , rateLimit , reportRouter)
   
 
     // Start the server

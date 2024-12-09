@@ -2,11 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+}
 
+body {
+  position: relative;
+}
+
+/* The existing spotlight effect */
+body::before,
+body::after {
+  content: "";
+  position: absolute;
+  z-index: -1; /* Behind the content */
+  border-radius: 50%;
+  background-color: rgba(5, 99, 241, 0.3); /* Light white with some transparency */
+  filter: blur(200px); /* Adjust blur level */
+  pointer-events: none; /* Ensures the blur doesn't interfere with user interaction */
+}
+
+/* Position and size for the top-right spotlight */
+body::before {
+  top: 5%;
+  right: 5%;
+  width: 600px;
+  height: 600px;
+}
+
+/* Position and size for the bottom-left spotlight */
+body::after {
+  bottom: 5%;
+  left: 5%;
+  background: rgba(239, 26, 239, 0.283);
+  width: 600px;
+  height: 600px;
+}
+
+/* Golden spotlight effect on mouse hover */
+.golden-spotlight {
+  position: absolute;
+  z-index: 10; /* Ensures it appears above other content */
+  border-radius: 50%;
+  background-color: rgba(238, 197, 17, 0.372); /* Golden color with transparency */
+  pointer-events: none; /* Prevents interference with user interaction */
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -50%); /* Centers the spotlight around the mouse */
+  filter: blur(100px); /* Soft blur for the golden effect */
+  transition: transform 0.1s ease-out;
+  top: 20px;
 }
 

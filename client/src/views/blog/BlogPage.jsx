@@ -21,7 +21,7 @@ const BlogPage = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8">
+    <div className="bg-[#ffffff91] min-h-screen py-8  backdrop:blur-md">
       <div className="container mx-auto px-4">
         {/* Add Blogs Button */}
         {isAuthenticate && (

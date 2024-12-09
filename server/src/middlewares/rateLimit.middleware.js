@@ -21,7 +21,7 @@ export const rateLimit = async (req, res, next) => {
                     ? "Oops! Bots aren’t allowed here. If you’re human, please try again! "
                     : "Access denied! We couldn’t process your request this time. Please try again later. ";
         
-            return res.status(statusCode).json({ error });
+            return res.status(statusCode).json({ message:error  });
         }
 
         // If the request passes, proceed to the next middleware or route handler

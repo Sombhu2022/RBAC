@@ -57,7 +57,7 @@ export const blogSlice = createSlice({
                 const { data, message } = action.payload;
                 state.loading.createBlogLoading = false;
                 state.status.createBlog = "success";
-                state.blogs.push(data);
+                state.blogs.unshift(data);
                 state.message = message || "Blog posted successfully!";
             })
             .addCase(createBlog.rejected, (state, action) => {
