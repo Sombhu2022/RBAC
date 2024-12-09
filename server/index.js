@@ -50,7 +50,9 @@ const startServer = async () => {
     app.use('/api/v1/user' , rateLimit , userRouter)
     app.use('/api/v1/blog' , rateLimit , blogRouter)
     app.use('/api/v1/report' , rateLimit , reportRouter)
-  
+    app.get('/' , (req , res)=>{
+         res.send({message:"this is base url of code canvas "})
+    })
 
     // Start the server
     const PORT = process.env.PORT || 8080;
