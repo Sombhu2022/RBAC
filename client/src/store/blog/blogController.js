@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { baseUrl } from "../../App";
+
 import axios from "axios";
 
 export const createBlog = createAsyncThunk(
@@ -7,7 +7,7 @@ export const createBlog = createAsyncThunk(
     async ( formData , { rejectWithValue }) => {
         try {
             const {data} = await axios.post(
-                `${baseUrl}/blog`,
+                `/api/v1/blog`,
                  formData ,
 
                 {
@@ -36,7 +36,7 @@ export const fetchAllBlogs = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const {data} = await axios.get(
-                `${baseUrl}/blog`,
+                `/api/v1/blog`,
 
                 {
                     headers: {
@@ -65,7 +65,7 @@ export const fetchBlogByBlogId = createAsyncThunk(
     async ({blogId}, { rejectWithValue }) => {
         try {
             const {data} = await axios.get(
-                `${baseUrl}/blog/${blogId}`,
+                `/api/v1/blog/${blogId}`,
 
                 {
                     headers: {
@@ -94,7 +94,7 @@ export const fetchAllBlogsOfEachUser = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const {data} = await axios.get(
-                `${baseUrl}/blog/myblog/all`,
+                `/api/v1/blog/myblog/all`,
 
                 {
                     headers: {
@@ -122,7 +122,7 @@ export const deleteBlog  = createAsyncThunk(
     async ({blogId}, { rejectWithValue }) => {
         try {
             const {data} = await axios.delete(
-                `${baseUrl}/blog/${blogId}`,
+                `/api/v1/blog/${blogId}`,
 
                 {
                     headers: {
@@ -150,7 +150,7 @@ export const updateBlog  = createAsyncThunk(
     async ({formData , blogId }, { rejectWithValue }) => {
         try {
             const {data} = await axios.patch(
-                `${baseUrl}/blog/${blogId}`,
+                `/api/v1/blog/${blogId}`,
                  formData,
                 {
                     headers: {
@@ -179,7 +179,7 @@ export const blockABlogPost  = createAsyncThunk(
     async ({blogId , isBlock }, { rejectWithValue }) => {
         try {
             const {data} = await axios.patch(
-                `${baseUrl}/blog/block-post/${blogId}`,{ isBlock},
+                `/api/v1/blog/block-post/${blogId}`,{ isBlock},
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -207,7 +207,7 @@ export const addNewReaction  = createAsyncThunk(
     async ({blogId , isReaction  }, { rejectWithValue }) => {
         try {
             const {data} = await axios.patch(
-                `${baseUrl}/blog/reaction/${blogId}`,{ isReaction },
+                `/api/v1/blog/reaction/${blogId}`,{ isReaction },
                 {
                     headers: {
                         'Content-Type': 'application/json'

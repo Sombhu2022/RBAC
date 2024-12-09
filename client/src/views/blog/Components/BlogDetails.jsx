@@ -86,7 +86,7 @@ const BlogDetails = () => {
             <img
               src={blog.image.url}
               alt={blog.title || "Blog image"}
-              className="w-full h-96 object-cover rounded-lg shadow-lg"
+              className="w-full  object-cover rounded-lg shadow-lg"
             />
           </div>
         )}
