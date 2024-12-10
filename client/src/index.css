@@ -7,9 +7,8 @@
   line-height: 1.5;
   font-weight: 400;
 }
-
 body {
-  position: relative;
+    position: relative;
 }
 
 /* The existing spotlight effect */
@@ -28,8 +27,8 @@ body::after {
 body::before {
   top: 5%;
   right: 5%;
-  width: 600px;
-  height: 600px;
+  width: 35vw; /* Responsive width */
+  height: 35vw; /* Responsive height */
 }
 
 /* Position and size for the bottom-left spotlight */
@@ -37,9 +36,25 @@ body::after {
   bottom: 5%;
   left: 5%;
   background: rgba(239, 26, 239, 0.283);
-  width: 600px;
-  height: 600px;
+  width: 35vw; /* Responsive width */
+  height: 35vw; /* Responsive height */
 }
+
+/* Add smaller sizes for smaller screens */
+@media (max-width: 768px) {
+  body::before, body::after {
+    width: 60vw;  /* Slightly bigger on smaller screens */
+    height: 60vw;
+  }
+}
+
+@media (max-width: 480px) {
+  body::before, body::after {
+    width: 80vw;  /* Even bigger for small mobile screens */
+    height: 80vw;
+  }
+}
+
 
 /* Golden spotlight effect on mouse hover */
 .golden-spotlight {

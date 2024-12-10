@@ -1,9 +1,8 @@
-
 {
     "rewrites": [
       {
         "source": "/api/:path*",
-        "destination": "https://codecanvasserver.vercel.app/:path*"
+        "destination": "https://codecanvasserver.vercel.app/api/:path*"
       },
       {
         "source": "/(.*)",
@@ -11,3 +10,4 @@
       }
     ]
   }
+  
