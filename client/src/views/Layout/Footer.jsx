@@ -59,7 +59,7 @@ const Footer = () => {
 
         {/* Footer Note */}
         <div className="text-gray-500 text-sm">
-          &copy; {new Date().getFullYear()} CodeCanvas by Sombhu Das. All rights reserved.
+          &copy; {new Date().getFullYear()}  All rights reserved by CodeCanvas.
         </div>
       </div>
     </footer>
